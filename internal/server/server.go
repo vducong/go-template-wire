@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"go-template-wire/configs"
 	"go-template-wire/internal/router"
@@ -63,8 +64,8 @@ func (s *Server) Start() {
 func (s *Server) serve() {
 	s.log.Infof("http: starting server at %d", s.cfg.Server.Port)
 	if err := s.httpServer.ListenAndServe(); err != nil {
-		if err == http.ErrServerClosed {
-			s.log.Info("http: server shutdown complete: %v", err)
+		if errors.Is(err, http.ErrServerClosed) {
+			s.log.Infof("http: server shutdown complete: %v", err)
 		} else {
 			s.log.Errorf("http: server closed unexpect: %v", err)
 		}

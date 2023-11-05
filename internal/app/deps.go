@@ -10,9 +10,11 @@ import (
 	"go-template-wire/internal/module"
 	"go-template-wire/internal/router"
 	"go-template-wire/internal/server"
+	"go-template-wire/pkg/cache"
 	"go-template-wire/pkg/databases"
 	httpclient "go-template-wire/pkg/http_client"
 	"go-template-wire/pkg/logger"
+	"go-template-wire/pkg/pubsub"
 	"go-template-wire/pkg/tracing"
 
 	"github.com/google/wire"
@@ -23,6 +25,8 @@ var infraSet = wire.NewSet(
 	databases.DatabaseSet,
 	tracing.Init,
 	httpclient.New,
+	pubsub.New,
+	cache.NewInMemoryCache,
 )
 
 // A Wire injector function that initialize all the app's dependencies

@@ -5,14 +5,16 @@ import (
 	"net/http"
 )
 
-type ErrCode int
-
 type AppErr struct {
-	Code        ErrCode
-	OriginalErr error
+	Code         ErrCode
+	OriginalErr  error
+	CustomErrMsg *string
 }
 
 func (e *AppErr) Error() string {
+	if e.CustomErrMsg != nil && *e.CustomErrMsg != "" {
+		return *e.CustomErrMsg
+	}
 	if val, ok := errMsgMap[e.Code]; ok {
 		return val
 	}
@@ -25,17 +27,3 @@ func (e *AppErr) HTTPCode() int {
 	}
 	return http.StatusBadRequest
 }
-
-var errMsgMap = map[ErrCode]string{
-	ErrReusableCodeNotFound: "Mã quà tặng không tồn tại",
-}
-
-var errCodeMap = map[ErrCode]int{
-	ErrReusableCodeFailed: http.StatusInternalServerError,
-}
-
-const (
-	ErrReusableCodeGetByCodeBinding ErrCode = 991001
-	ErrReusableCodeNotFound         ErrCode = 991002
-	ErrReusableCodeFailed           ErrCode = 991003
-)

@@ -53,5 +53,5 @@ func (s *Service) GetUserInfo(ctx context.Context, userID string) (*User, error)
 	if err != nil {
 		return nil, failure.ErrWithTrace(fmt.Errorf("User=%s | Failed to typecast response: %w", userID, err))
 	}
-	return res, nil
+	return &res.Data, nil
 }
